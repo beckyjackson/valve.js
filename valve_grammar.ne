@@ -41,7 +41,7 @@ arguments -> argument ("," _ argument):* {%
 
 argument -> field | named_arg | label | int | function
 
-field -> label "." label {% function(d) {
+field -> label "." str {% function(d) {
   return {
     type: "field",
     table: d[0][0],
@@ -62,8 +62,10 @@ datatype -> label {%
       name: d[0][0],
     } } %}
 
+str -> TEXT | dqstring {% id %}
 label -> WORD | dqstring {% id %}
 int -> INTEGER {% parseInt %}
 
 INTEGER -> [0-9]:+ {% join %}
-WORD -> [a-zA-Z ]:+ {% join %}
+WORD -> [a-zA-Z-_]:+ {% join %}
+TEXT -> [a-zA-Z-_ ]:+ {% join %}
